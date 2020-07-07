@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class LocalSearchProblem(ABC):
 
     @abstractmethod
-    def get_starting_assign():
+    def get_starting_assign(self):
         pass
 
     #chooses variable that should be updated in local search

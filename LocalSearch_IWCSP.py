@@ -1,5 +1,8 @@
+import random
+
 import readInput
 from LocalSearchProblem import LocalSearchProblem
+
 
 class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
@@ -15,10 +18,13 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         self.incompTable, variables, varDomain = self.input.readIncomp(incomp)
         self.oracleTable = self.input.readOracle(oracle, self.domainrange)
         self.elicitationTable = self.input.readElicitationCost(elicit, self.domainrange)
-        self.starting_assign = None
+        self.starting_assign = self.get_starting_assign()
 
-    def get_starting_assign():
-        pass
+    #choose random starting assignment
+    def get_starting_assign(self):
+        starting_dict = {key: random.randint(1, self.domainrange) for key in self.varList}
+        return starting_dict
+
 
     #chooses variable that should be updated in local search
     def choose_variable(self):
@@ -30,4 +36,4 @@ class LocalSearch_IWCSP(LocalSearchProblem):
 
 
 LSP = LocalSearch_IWCSP('1')
-print (LSP.input, LSP.varList, LSP.domainrange, LSP.incompTable)
+print (LSP.input, LSP.varList, LSP.domainrange, LSP.incompTable, LSP.starting_assign)
