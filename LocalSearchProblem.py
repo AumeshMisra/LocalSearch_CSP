@@ -15,3 +15,7 @@ class LocalSearchProblem(ABC):
     @abstractmethod
     def choose_value_for_variable(self, variable):
         pass
+
+    @abstractmethod
+    def update_assign(self, variable):
+        pass
