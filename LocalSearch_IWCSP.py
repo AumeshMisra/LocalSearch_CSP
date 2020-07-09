@@ -27,8 +27,6 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         scopes = self.incompTable.keys()
         answer_list = list(starting_dict)
         comb = [(str(x) + ' ' +  str(y)) for idx, x in enumerate(answer_list) for y in answer_list[idx + 1: ]]
-        print (starting_dict)
-        print (self.incompTable)
         #iterate through constraints and update the incomplete table with elicited values
         for scope in comb:
             if scope in self.incompTable or scope[::-1] in self.incompTable:
@@ -42,7 +40,6 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                     elicited_value = self.oracleTable[scope][row_cell][column_cell]
                     self.incompTable[scope][row_cell][column_cell] = elicited_value
 
-        print (self.incompTable)
         return starting_dict
 
 
@@ -97,7 +94,7 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         return best_value
 
     #computes the preference of a given assignment
-    def compute_preference(self, assignment):
+    def compute_preference(self, assignment, elicit = False):
         scopes = self.incompTable.keys()
         answer_list = list(assignment)
         comb = [(str(x) + ' ' +  str(y)) for idx, x in enumerate(answer_list) for y in answer_list[idx + 1: ]]
@@ -111,15 +108,26 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                 row_cell = assignment[scope_values[0]]
                 column_cell = assignment[scope_values[1]]
 
-                if self.incompTable[scope][row_cell][column_cell] != '?':
+                if (elicit):
+                    if self.incompTable[scope][row_cell][column_cell] == '?':
+                        elicited_value = self.oracleTable[scope][row_cell][column_cell]
+                        self.incompTable[scope][row_cell][column_cell] = elicited_value
                     constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                     preference_val += constraint_value
+                else:
+                    if self.incompTable[scope][row_cell][column_cell] != '?':
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
 
         return preference_val
 
     #updates assignment
     def update_assign(self, variable, value):
-        self.current_assign[variable] = value
+        new_assign = self.current_assign
+        new_assign[variable] = value
+
+        if self.compute_preference(new_assign, elicit = True) > self.compute_preference(self.current_assign):
+            self.current_assign[variable] = value
 
 
 LSP = LocalSearch_IWCSP('1')
