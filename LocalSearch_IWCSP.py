@@ -68,7 +68,6 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         best_variable = 0
         max_val = float('-inf')
 
-        #print (local_pref_dict)
         for key in local_pref_dict:
             if sum(local_pref_dict[key]) > max_val:
                 best_variable = key
@@ -83,14 +82,12 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         preferences = {}
         for value in range(0,self.domainrange):
             if value != old_value:
-                new_assign = self.current_assign
+                new_assign = self.current_assign.copy()
                 new_assign[variable] = value
                 preferences[value] = self.compute_preference(new_assign)
 
         #we want the value that minimizes the cost
-        #print(preferences)
         best_value = min(preferences, key=preferences.get)
-        #print (best_value)
         return best_value
 
     #computes the preference of a given assignment
@@ -123,18 +120,37 @@ class LocalSearch_IWCSP(LocalSearchProblem):
 
     #updates assignment
     def update_assign(self, variable, value):
-        new_assign = self.current_assign
+        new_assign = self.current_assign.copy()
         new_assign[variable] = value
 
-        if self.compute_preference(new_assign, elicit = True) > self.compute_preference(self.current_assign):
+        if self.compute_preference(new_assign, elicit = True) < self.compute_preference(self.current_assign):
+            print ("changed variable!")
             self.current_assign[variable] = value
+            print (self.current_assign)
 
+    def solve(self, iterations = 100, p = 0.00):
+        for i in range(0, iterations):
+            random_step_chance = random.random()
+            if (random_step_chance > p):
+                var = self.choose_variable()
+            else:
+                var = random.choice(self.varList)
+            value = self.choose_value_for_variable(var)
+            self.update_assign(var, value)
+
+
+        print (self.current_assign)
+        print (self.compute_preference(self.current_assign))
+        return self.current_assign
 
 LSP = LocalSearch_IWCSP('1')
 #print(LSP.current_assign)
-var = LSP.choose_variable()
-#print('var: ' + str(var))
-value = LSP.choose_value_for_variable(var)
-LSP.update_assign(var, value)
-#print (LSP.current_assign)
-LSP.choose_variable()
+# var = LSP.choose_variable()
+# #print('var: ' + str(var))
+# value = LSP.choose_value_for_variable(var)
+# LSP.update_assign(var, value)
+# #print (LSP.current_assign)
+# LSP.choose_variable()
+#print (LSP.varList)
+print (LSP.current_assign)
+LSP.solve(iterations = 1000, p = 0.20)
