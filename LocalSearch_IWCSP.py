@@ -7,7 +7,7 @@ from LocalSearchProblem import LocalSearchProblem
 
 class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
-    def __init__(self, name):
+    def __init__(self, name, tabu_list_maxsize):
         path = './'
         xmlfile = 'input_files/Rnd3-2.xml'
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
@@ -20,6 +20,8 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         self.oracleTable = self.input.readOracle(oracle, self.domainrange)
         self.elicitationTable = self.input.readElicitationCost(elicit, self.domainrange)
         self.current_assign = self.get_starting_assign()
+        self.tabu_list = []
+        self.tabu_list_maxsize = tabu_list_maxsize
 
     #choose random starting assignment
     def get_starting_assign(self):
@@ -65,8 +67,12 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                 local_pref_dict[scope_values[0]].append(int(constraint_value))
                 local_pref_dict[scope_values[1]].append(int(constraint_value))
 
-        best_variable = 0
+        best_variable = None
         max_val = float('-inf')
+
+        for vars in self.tabu_list:
+            if vars in local_pref_dict:
+                del local_pref_dict[vars]
 
         for key in local_pref_dict:
             if sum(local_pref_dict[key]) > max_val:
@@ -78,8 +84,13 @@ class LocalSearch_IWCSP(LocalSearchProblem):
 
     #chooses value for variable that should be updated in local search
     def choose_value_for_variable(self, variable):
+
+        if (variable is None):
+            return
+
         old_value = self.current_assign[variable]
         preferences = {}
+
         for value in range(0,self.domainrange):
             if value != old_value:
                 new_assign = self.current_assign.copy()
@@ -123,12 +134,20 @@ class LocalSearch_IWCSP(LocalSearchProblem):
         new_assign = self.current_assign.copy()
         new_assign[variable] = value
 
+        if (variable is None):
+            return
+
         if self.compute_preference(new_assign, elicit = True) < self.compute_preference(self.current_assign):
             print ("changed variable!")
             self.current_assign[variable] = value
-            print (self.current_assign)
+        else:
+            if variable not in self.tabu_list:
+                print ("added tabu")
+                self.tabu_list.append(variable)
+            if (len(self.tabu_list) > self.tabu_list_maxsize):
+                self.tabu_list.pop(0)
 
-    def solve(self, iterations = 100, p = 0.00):
+    def solve(self, iterations = 100, p = 0.00, t = 0):
         for i in range(0, iterations):
             random_step_chance = random.random()
             if (random_step_chance > p):
@@ -138,12 +157,9 @@ class LocalSearch_IWCSP(LocalSearchProblem):
             value = self.choose_value_for_variable(var)
             self.update_assign(var, value)
 
-
-        print (self.current_assign)
-        print (self.compute_preference(self.current_assign))
         return self.current_assign
 
-LSP = LocalSearch_IWCSP('1')
+LSP = LocalSearch_IWCSP('1', 3)
 #print(LSP.current_assign)
 # var = LSP.choose_variable()
 # #print('var: ' + str(var))
@@ -152,5 +168,6 @@ LSP = LocalSearch_IWCSP('1')
 # #print (LSP.current_assign)
 # LSP.choose_variable()
 #print (LSP.varList)
-print (LSP.current_assign)
 LSP.solve(iterations = 1000, p = 0.20)
+print (LSP.current_assign)
+print (LSP.compute_preference(LSP.current_assign))
