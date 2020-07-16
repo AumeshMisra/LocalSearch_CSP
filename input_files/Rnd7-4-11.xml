@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<instance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="src/ch/epfl/lia/frodo/algorithms/XCSPschema.xsd">
+<presentation format="XCSP 2.1_FRODO" maxConstraint="2" maximize="true" name="Rnd7–4-1.xml"/>
+<agents nbAgents="7">
+<agent name="0"/>
+<agent name="1"/>
+<agent name="2"/>
+<agent name="3"/>
+<agent name="4"/>
+<agent name="5"/>
+<agent name="6"/>
+</agents>
+<domains nbDomains="1">
+<domain name="D" nbValues="3">1..3</domain>
+</domains>
+<variables nbVariables="7">
+<variable agent="0" domain="D" name="0"/>
+<variable agent="1" domain="D" name="1"/>
+<variable agent="2" domain="D" name="2"/>
+<variable agent="3" domain="D" name="3"/>
+<variable agent="4" domain="D" name="4"/>
+<variable agent="5" domain="D" name="5"/>
+<variable agent="6" domain="D" name="6"/>
+</variables>
+<relations nbRelations="9">
+<relation name="r_1" arity="2" nbTuples="9" semantics="soft">75:1 1 |3:1 2 |47:1 3 |60:2 1 |49:2 2 |30:2 3 |46:3 1 |50:3 2 |45:3 3 </relation>
+<relation name="r_2" arity="2" nbTuples="9" semantics="soft">109:1 1 |117:1 2 |97:1 3 |161:2 1 |100:2 2 |135:2 3 |55:3 1 |21:3 2 |165:3 3 </relation>
+<relation name="r_3" arity="2" nbTuples="9" semantics="soft">188:1 1 |11:1 2 |92:1 3 |57:2 1 |28:2 2 |155:2 3 |90:3 1 |113:3 2 |43:3 3 </relation>
+<relation name="r_4" arity="2" nbTuples="9" semantics="soft">16:1 1 |224:1 2 |98:1 3 |120:2 1 |63:2 2 |71:2 3 |86:3 1 |72:3 2 |6:3 3 </relation>
+<relation name="r_5" arity="2" nbTuples="9" semantics="soft">25:1 1 |11:1 2 |49:1 3 |62:2 1 |49:2 2 |58:2 3 |72:3 1 |74:3 2 |102:3 3 </relation>
+<relation name="r_6" arity="2" nbTuples="9" semantics="soft">137:1 1 |91:1 2 |74:1 3 |122:2 1 |5:2 2 |52:2 3 |54:3 1 |126:3 2 |65:3 3 </relation>
+<relation name="r_7" arity="2" nbTuples="9" semantics="soft">53:1 1 |135:1 2 |84:1 3 |15:2 1 |66:2 2 |110:2 3 |56:3 1 |12:3 2 |33:3 3 </relation>
+<relation name="r_8" arity="2" nbTuples="9" semantics="soft">50:1 1 |69:1 2 |57:1 3 |6:2 1 |127:2 2 |84:2 3 |75:3 1 |3:3 2 |26:3 3 </relation>
+<relation name="r_9" arity="2" nbTuples="9" semantics="soft">17:1 1 |121:1 2 |50:1 3 |71:2 1 |13:2 2 |128:2 3 |87:3 1 |83:3 2 |99:3 3 </relation>
+</relations>
+<constraints nbConstraints="9">
+<constraint name="c_1" arity="2" scope="6 3" reference="r_1"/>
+<constraint name="c_2" arity="2" scope="5 2" reference="r_2"/>
+<constraint name="c_3" arity="2" scope="5 4" reference="r_3"/>
+<constraint name="c_4" arity="2" scope="4 6" reference="r_4"/>
+<constraint name="c_5" arity="2" scope="4 3" reference="r_5"/>
+<constraint name="c_6" arity="2" scope="3 0" reference="r_6"/>
+<constraint name="c_7" arity="2" scope="3 2" reference="r_7"/>
+<constraint name="c_8" arity="2" scope="3 5" reference="r_8"/>
+<constraint name="c_9" arity="2" scope="2 4" reference="r_9"/>
+</constraints>
+</instance>

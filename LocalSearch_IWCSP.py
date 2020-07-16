@@ -10,7 +10,7 @@ class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
     def __init__(self, name, tabu_list_maxsize):
         path = './'
-        xmlfile = 'input_files/Rnd10-3-1.xml'
+        xmlfile = 'input_files/Rnd5-3-1.xml'
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
         oracle = open(path + 'oracle'+'-'+name+'.txt', 'r')
         elicit = open(path + 'elicit'+'-'+name+'.txt', 'r')
