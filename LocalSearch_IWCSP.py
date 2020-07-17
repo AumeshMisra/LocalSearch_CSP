@@ -250,7 +250,7 @@ for i in range(0,10):
     preferences.append(LSP.compute_preference(LSP.current_assign)[0])
     runtimes.append(runtime)
     elicitation_cost.append(LSP.elicitation_cost)
-    print (LSP.elicitation_cost)
+    #print (LSP.elicitation_cost)
     elicitation_numbers.append(LSP.elicitation_number)
 
     # print (LSP.current_assign)
