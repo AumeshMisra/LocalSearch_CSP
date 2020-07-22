@@ -21,3 +21,10 @@ Example: python GenerateTree.py Rnd5-7-1.xml 1 0 ps r 0 ./ 1
 
 
 Output numbers shown after running the above command are as follows: lower bound on the cost tables , upper bound on the cost tables , the total solution costs (updated final upper bound), actual constraint cost before adding elicitation costs to it , accumulated elicited cost , number of elicited constraints , total number of unknown costs in the problem, runtime of solving the problem , elicitation costs of the optimal solution it self which is not cumulative
+
+java -jar $pathtojar/ProblemGen-Updated.jar $n 2 0 0 R$n-2-$i-25.xml $pathtoproblem 0.$p 5 2
+$n is number of variables/agents in xml file
+2 is the number of values in the domain
+$p is constraint density
+5 is upper bound cost
+2 is lower bound cost
