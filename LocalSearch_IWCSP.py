@@ -184,16 +184,14 @@ class LocalSearch_IWCSP(LocalSearchProblem):
             if (self.elicitation_cost + sum(elicit_cost_list)) < self.budget:
                 #We elicit all missing values
                 if (self.elicitation_strat == "ALL"):
-                    while ((index < len(elicit_cost_list))):
-                        val = elicit_cost_list[index]
-                        scope = elicit_dict_cost[val][0]
-                        row_cell = elicit_dict_cost[val][1]
-                        column_cell = elicit_dict_cost[val][2]
+                    index = 0
+                    while ((index < len(elicit_value_list))):
+                        scope = elicit_dict_cost[index][0]
+                        row_cell = elicit_dict_cost[index][1]
+                        column_cell = elicit_dict_cost[index][2]
+
                         #get elicitation cost
                         elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
-                        # if ((self.elicitation_cost + int(elicitation_cost)) > self.budget):
-                        #     break
-
                         self.elicitation_cost += int(elicitation_cost)
 
                         #get elicitated value
@@ -223,9 +221,30 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                         constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                         preference_val += constraint_value
                         index += 1
+                if (self.elicitation_strat == "BM"):
+                    elicit_combined_list = [elicit_value_list[i]+elicit_cost_list[i] for i in range(len(elicit_value_list))]
+                    sorted_indices = np.argsort(elicit_combined_list)
+                    index = 0
+                    while ((preference_val < self.best_val) and (index < len(sorted_indices))):
+                        val = sorted_indices[index]
+                        scope = elicit_dict_value[val][0]
+                        row_cell = elicit_dict_value[val][1]
+                        column_cell = elicit_dict_value[val][2]
+
+                        #get elicitation cost
+                        elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
+                        self.elicitation_cost += int(elicitation_cost)
+
+                        #get elicitated value
+                        self.incompTable[scope][row_cell][column_cell] = self.oracleTable[scope][row_cell][column_cell]
+                        self.elicitation_number += 1
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
+                        index += 1
+
             else:
                 #right now return this however we should come up with a new elicitation strategy
-                return([float('inf')], 0)
+                return([float('inf'), 0])
 
 
 
@@ -277,10 +296,10 @@ elicitation_cost = []
 elicitation_numbers = []
 
 
-for i in range(0,10):
+for i in range(0,100):
 
     start = time.time()
-    LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'WW', budget = 150)
+    LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'WW', budget = 89.5)
     # print (LSP.current_assign)
     # print (LSP.best_val)
     LSP.solve(iterations = 100000, p = 0.20)
