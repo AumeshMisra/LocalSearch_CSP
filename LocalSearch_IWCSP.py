@@ -11,7 +11,7 @@ class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
     def __init__(self, name, tabu_list_maxsize, budget, heuristic = None, elicitation_strat = 'ALL'):
         path = './'
-        xmlfile = 'input_files/Rnd5-3-1.xml'
+        xmlfile = 'input_files/Rnd8-3-1518.xml'
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
         oracle = open(path + 'oracle'+'-'+name+'.txt', 'r')
         elicit = open(path + 'elicit'+'-'+name+'.txt', 'r')
@@ -241,6 +241,26 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                         constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                         preference_val += constraint_value
                         index += 1
+                if (self.elicitation_strat == "MM"):
+                    sorted_indices = np.argsort(elicit_cost_list)
+                    index = 0
+                    while ((preference_val < self.best_val) and (index < len(sorted_indices))):
+                        val = sorted_indices[index]
+                        scope = elicit_dict_value[val][0]
+                        row_cell = elicit_dict_value[val][1]
+                        column_cell = elicit_dict_value[val][2]
+
+                        #get elicitation cost
+                        elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
+                        self.elicitation_cost += int(elicitation_cost)
+
+                        #get elicitated value
+                        self.incompTable[scope][row_cell][column_cell] = self.oracleTable[scope][row_cell][column_cell]
+                        self.elicitation_number += 1
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
+                        index += 1
+
 
             else:
                 #right now return this however we should come up with a new elicitation strategy
@@ -296,10 +316,10 @@ elicitation_cost = []
 elicitation_numbers = []
 
 
-for i in range(0,100):
+for i in range(0,10):
 
     start = time.time()
-    LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'WW', budget = 89.5)
+    LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'ALL', budget = 336.2)
     # print (LSP.current_assign)
     # print (LSP.best_val)
     LSP.solve(iterations = 100000, p = 0.20)
