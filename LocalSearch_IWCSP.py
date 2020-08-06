@@ -2,6 +2,7 @@ import random
 import time
 from itertools import combinations
 import numpy as np
+import argparse
 
 import readInput
 from LocalSearchProblem import LocalSearchProblem
@@ -11,7 +12,7 @@ class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
     def __init__(self, name, tabu_list_maxsize, budget, heuristic = None, elicitation_strat = 'ALL'):
         path = './'
-        xmlfile = 'input_files/Rnd8-3-1518.xml'
+        xmlfile = 'input_files/Rnd5-3-1.xml'
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
         oracle = open(path + 'oracle'+'-'+name+'.txt', 'r')
         elicit = open(path + 'elicit'+'-'+name+'.txt', 'r')
@@ -310,35 +311,60 @@ class LocalSearch_IWCSP(LocalSearchProblem):
 
         return self.current_assign
 
-preferences = []
-runtimes = []
-elicitation_cost = []
-elicitation_numbers = []
+def define_parser():
+    parser = argparse.ArgumentParser(description='Process Arguments For Local Search.')
+    parser.add_argument('--iterations', type=int,
+                        help='an integer for the number of iterations')
+    parser.add_argument('--budget', type=int,
+                        help='an integer for the budget')
+    parser.add_argument('--flag', type=int,
+                        help='a flag to use elicitation cost')
+    return (parser)
+
+def main():
+    preferences = []
+    runtimes = []
+    elicitation_cost = []
+    elicitation_numbers = []
+
+    parser = define_parser()
+    args = parser.parse_args()
+
+    iterations = args.iterations
+    if (args.flag == 1):
+        budget = args.budget
+    else:
+        budget = float('inf')
 
 
-for i in range(0,10):
 
-    start = time.time()
-    LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'ALL', budget = 336.2)
-    # print (LSP.current_assign)
-    # print (LSP.best_val)
-    LSP.solve(iterations = 100000, p = 0.20)
-    end = time.time()
-    runtime = end - start
-    preferences.append(LSP.compute_preference(LSP.current_assign)[0])
-    runtimes.append(runtime)
-    elicitation_cost.append(LSP.elicitation_cost)
-    #print (LSP.elicitation_cost)
-    elicitation_numbers.append(LSP.elicitation_number)
+    for i in range(0,10):
 
-    # print (LSP.current_assign)
-    # print (LSP.compute_preference(LSP.current_assign))
-    # print (runtime)
-    # print (LSP.elicitation_number)
+        start = time.time()
+        LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'MM', budget = budget)
+        # print (LSP.current_assign)
+        # print (LSP.best_val)
+        LSP.solve(iterations = iterations, p = 0.20)
+        end = time.time()
+        runtime = end - start
+        preferences.append(LSP.compute_preference(LSP.current_assign)[0])
+        runtimes.append(runtime)
+        elicitation_cost.append(LSP.elicitation_cost)
+        #print (LSP.elicitation_cost)
+        elicitation_numbers.append(LSP.elicitation_number)
 
-print (sum(preferences)/ len(preferences))
-print (sum(runtimes)/ len(runtimes))
-print (sum(elicitation_cost)/ len(elicitation_cost))
-print (sum(elicitation_numbers)/ len(elicitation_numbers))
-print (preferences)
-#print (LSP.current_assign)
+        # print (LSP.current_assign)
+        # print (LSP.compute_preference(LSP.current_assign))
+        # print (runtime)
+        # print (LSP.elicitation_number)
+
+    print (sum(preferences)/ len(preferences))
+    print (sum(runtimes)/ len(runtimes))
+    print (sum(elicitation_cost)/ len(elicitation_cost))
+    print (sum(elicitation_numbers)/ len(elicitation_numbers))
+    print (preferences)
+    #print (LSP.current_assign)
+
+
+if __name__ == "__main__":
+    main()
