@@ -12,7 +12,7 @@ class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
     def __init__(self, name, tabu_list_maxsize, budget, heuristic = None, elicitation_strat = 'ALL'):
         path = './'
-        xmlfile = 'input_files/Rnd5-3-1.xml'
+        xmlfile = 'input_files/Rnd25-2-25.xml'
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
         oracle = open(path + 'oracle'+'-'+name+'.txt', 'r')
         elicit = open(path + 'elicit'+'-'+name+'.txt', 'r')
@@ -338,10 +338,10 @@ def main():
 
 
 
-    for i in range(0,10):
+    for i in range(0,1):
 
         start = time.time()
-        LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'MM', budget = budget)
+        LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'WW', budget = budget)
         # print (LSP.current_assign)
         # print (LSP.best_val)
         LSP.solve(iterations = iterations, p = 0.20)
