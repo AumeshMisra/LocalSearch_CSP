@@ -222,6 +222,25 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                         constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                         preference_val += constraint_value
                         index += 1
+                if (self.elicitation_strat == "BB"):
+                    sorted_indices = np.argsort(elicit_value_list)
+                    index = 0
+                    while ((preference_val < self.best_val) and (index < len(sorted_indices))):
+                        val = sorted_indices[index]
+                        scope = elicit_dict_value[val][0]
+                        row_cell = elicit_dict_value[val][1]
+                        column_cell = elicit_dict_value[val][2]
+
+                        #get elicitation cost
+                        elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
+                        self.elicitation_cost += int(elicitation_cost)
+
+                        #get elicitated value
+                        self.incompTable[scope][row_cell][column_cell] = self.oracleTable[scope][row_cell][column_cell]
+                        self.elicitation_number += 1
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
+                        index += 1
                 if (self.elicitation_strat == "BM"):
                     elicit_combined_list = [elicit_value_list[i]+elicit_cost_list[i] for i in range(len(elicit_value_list))]
                     sorted_indices = np.argsort(elicit_combined_list)
@@ -348,21 +367,15 @@ def main():
 
         start = time.time()
         LSP = LocalSearch_IWCSP(name = '1', file_path = filepath, tabu_list_maxsize = 1000, elicitation_strat = elicitation_strat, budget = budget)
-        # print (LSP.current_assign)
-        # print (LSP.best_val)
         LSP.solve(iterations = iterations, p = 0.20)
         end = time.time()
         runtime = end - start
         preferences.append(LSP.compute_preference(LSP.current_assign)[0])
         runtimes.append(runtime)
         elicitation_cost.append(LSP.elicitation_cost)
-        #print (LSP.elicitation_cost)
         elicitation_numbers.append(LSP.elicitation_number)
 
-        # print (LSP.current_assign)
-        # print (LSP.compute_preference(LSP.current_assign))
-        # print (runtime)
-        # print (LSP.elicitation_number)
+        
 
     print ('number of runs: ' + str(runs))
     print ('preference: ' + str((sum(preferences)/ len(preferences))))
