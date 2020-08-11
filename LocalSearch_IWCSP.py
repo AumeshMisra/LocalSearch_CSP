@@ -10,9 +10,9 @@ from LocalSearchProblem import LocalSearchProblem
 
 class LocalSearch_IWCSP(LocalSearchProblem):
     #name: filename
-    def __init__(self, name, tabu_list_maxsize, budget, heuristic = None, elicitation_strat = 'ALL'):
+    def __init__(self, name, file_path, tabu_list_maxsize, budget, heuristic = None, elicitation_strat = 'ALL'):
         path = './'
-        xmlfile = 'input_files/Rnd25-2-25.xml'
+        xmlfile = file_path
         incomp = open(path + 'output-Incomp'+'-'+name+'.txt', 'r')
         oracle = open(path + 'oracle'+'-'+name+'.txt', 'r')
         elicit = open(path + 'elicit'+'-'+name+'.txt', 'r')
@@ -319,6 +319,10 @@ def define_parser():
                         help='an integer for the budget')
     parser.add_argument('--flag', type=int,
                         help='a flag to use elicitation cost')
+    parser.add_argument('--strategy', type=str,
+                        help='an elicitation strategy to use')
+    parser.add_argument('--filepath', type=str,
+                        help='the filepath to a problem')
     return (parser)
 
 def main():
@@ -331,17 +335,19 @@ def main():
     args = parser.parse_args()
 
     iterations = args.iterations
+    elicitation_strat = args.strategy
+    filepath = args.filepath
     if (args.flag == 1):
         budget = args.budget
     else:
         budget = float('inf')
 
 
-
-    for i in range(0,1):
+    runs = 1
+    for i in range(0,runs):
 
         start = time.time()
-        LSP = LocalSearch_IWCSP('1', 1000, elicitation_strat = 'WW', budget = budget)
+        LSP = LocalSearch_IWCSP(name = '1', file_path = filepath, tabu_list_maxsize = 1000, elicitation_strat = elicitation_strat, budget = budget)
         # print (LSP.current_assign)
         # print (LSP.best_val)
         LSP.solve(iterations = iterations, p = 0.20)
@@ -358,12 +364,12 @@ def main():
         # print (runtime)
         # print (LSP.elicitation_number)
 
-    print (sum(preferences)/ len(preferences))
-    print (sum(runtimes)/ len(runtimes))
-    print (sum(elicitation_cost)/ len(elicitation_cost))
-    print (sum(elicitation_numbers)/ len(elicitation_numbers))
-    print (preferences)
-    #print (LSP.current_assign)
+    print ('number of runs: ' + str(runs))
+    print ('preference: ' + str((sum(preferences)/ len(preferences))))
+    print ('runtime: ' + str((sum(runtimes)/ len(runtimes))))
+    print ('elicitation_cost: ' + str((sum(elicitation_cost)/ len(elicitation_cost))))
+    print ('number of elicitations: ' + str((sum(elicitation_numbers)/ len(elicitation_numbers))))
+    print ('final assignment: ' + str(LSP.current_assign))
 
 
 if __name__ == "__main__":
