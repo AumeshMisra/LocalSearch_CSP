@@ -280,7 +280,27 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                         constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                         preference_val += constraint_value
                         index += 1
+                if (self.elicitation_strat == "WM"):
+                    elicit_combined_list = [elicit_value_list[i]+elicit_cost_list[i] for i in range(len(elicit_value_list))]
+                    sorted_indices = np.argsort(elicit_combined_list)
+                    sorted_indices = sorted_indices[::-1]
+                    index = 0
+                    while ((preference_val < self.best_val) and (index < len(sorted_indices))):
+                        val = sorted_indices[index]
+                        scope = elicit_dict_value[val][0]
+                        row_cell = elicit_dict_value[val][1]
+                        column_cell = elicit_dict_value[val][2]
 
+                        #get elicitation cost
+                        elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
+                        self.elicitation_cost += int(elicitation_cost)
+
+                        #get elicitated value
+                        self.incompTable[scope][row_cell][column_cell] = self.oracleTable[scope][row_cell][column_cell]
+                        self.elicitation_number += 1
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
+                        index += 1
 
             else:
                 #right now return this however we should come up with a new elicitation strategy
@@ -338,6 +358,8 @@ def define_parser():
                         help='an integer for the budget')
     parser.add_argument('--flag', type=int,
                         help='a flag to use elicitation cost')
+    parser.add_argument('--original', type=int,
+                        help='a flag to go back to the original proble. We can only use BB, WW, and ALL elicitation strategies')
     parser.add_argument('--strategy', type=str,
                         help='an elicitation strategy to use')
     parser.add_argument('--filepath', type=str,
@@ -361,6 +383,13 @@ def main():
     else:
         budget = float('inf')
 
+    if (args.original == 1):
+        if (elicitation_strat != "WW" and elicitation_strat != "ALL"
+                and elicitation_strat != "BB"):
+            elicitation_strat = "ALL"
+            budget = float('inf')
+
+
 
     runs = 1
     for i in range(0,runs):
@@ -375,9 +404,10 @@ def main():
         elicitation_cost.append(LSP.elicitation_cost)
         elicitation_numbers.append(LSP.elicitation_number)
 
-        
+
 
     print ('number of runs: ' + str(runs))
+    print ('Elicitation Strategy: ' + elicitation_strat)
     print ('preference: ' + str((sum(preferences)/ len(preferences))))
     print ('runtime: ' + str((sum(runtimes)/ len(runtimes))))
     print ('elicitation_cost: ' + str((sum(elicitation_cost)/ len(elicitation_cost))))
