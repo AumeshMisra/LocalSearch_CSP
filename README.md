@@ -15,7 +15,7 @@ All you have to do is clone/download the repo
 
 ## Deployment
 
-A default command line statement to run the program is:
+An example command line statement to run the program is:
 python LocalSearch_IWCSP.py --iterations 100000 --flag 1 --budget 70 --filepath input_files/Rnd5-3-1.xml --strategy BW --original 0
 
 Here are the different input parameters:
