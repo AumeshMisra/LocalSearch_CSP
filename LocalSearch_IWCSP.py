@@ -301,6 +301,33 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                         constraint_value = int(self.incompTable[scope][row_cell][column_cell])
                         preference_val += constraint_value
                         index += 1
+                if (self.elicitation_strat == "BW"):
+                    elicit_combined_list = [elicit_value_list[i]+elicit_cost_list[i] for i in range(len(elicit_value_list))]
+                    sorted_indices = np.argsort(elicit_combined_list)
+                    first = 0
+                    switch = 0
+                    last = len(sorted_indices) - 1
+                    while ((preference_val < self.best_val) and (first <= last)):
+                        if ((switch % 2) == 0):
+                            index = first
+                            first += 1
+                        else:
+                            index = last
+                            last -= 1
+                        val = sorted_indices[index]
+                        scope = elicit_dict_value[val][0]
+                        row_cell = elicit_dict_value[val][1]
+                        column_cell = elicit_dict_value[val][2]
+
+                        #get elicitation cost
+                        elicitation_cost = self.elicitationTable[scope][row_cell][column_cell]
+                        self.elicitation_cost += int(elicitation_cost)
+
+                        #get elicitated value
+                        self.incompTable[scope][row_cell][column_cell] = self.oracleTable[scope][row_cell][column_cell]
+                        self.elicitation_number += 1
+                        constraint_value = int(self.incompTable[scope][row_cell][column_cell])
+                        preference_val += constraint_value
 
             else:
                 #right now return this however we should come up with a new elicitation strategy
@@ -385,13 +412,13 @@ def main():
 
     if (args.original == 1):
         if (elicitation_strat != "WW" and elicitation_strat != "ALL"
-                and elicitation_strat != "BB"):
+                and elicitation_strat != "BB" and elicitation_strat != "BW"):
             elicitation_strat = "ALL"
             budget = float('inf')
 
 
 
-    runs = 1
+    runs = 10
     for i in range(0,runs):
 
         start = time.time()
