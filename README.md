@@ -19,9 +19,15 @@ A default command line statement to run the program is:
 python LocalSearch_IWCSP.py --iterations 100000 --flag 1 --budget 70 --filepath input_files/Rnd5-3-1.xml --strategy BW --original 0
 
 Here are the different input parameters:
-1) --iterations number of iterations
-2) --flag a flag on whether to include a budget or no (switch to 1 to include a budget)
-3) --budget the budget the elicitation cost should not exceed
-4) --filepath takes a filepath
-5) --strategy the elicitation strategy we should employ
-6) --original switch to 1 to run the program as an (IWCSP) otherwise leave as 0
+1) --iterations
+  number of iterations
+2) --flag
+  a flag on whether to include a budget or no (switch to 1 to include a budget)
+3) --budget
+  the budget the elicitation cost should not exceed
+4) --filepath
+  takes a filepath
+5) --strategy
+  the elicitation strategy we should employ
+6) --original
+  switch to 1 to run the program as an (IWCSP) otherwise leave as 0
