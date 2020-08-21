@@ -15,13 +15,19 @@ All you have to do is clone/download the repo
 
 ## Deployment
 
-Step1: We use a randomly generated problem in xml format and use the following code (readInput.py) to convert it to an incomplete problem with some unknown constraint costs as follows:
+These instructions will help you run and deploy the program
+
+### Step1:
+
+We use a randomly generated problem in xml format and use the following code (readInput.py) to convert it to an incomplete problem with some unknown constraint costs as follows:
 
  Input arguments in order of appearance: {xml file}, {1: is the command to assign a number of unknown costs to the whole problem or 2: every constraint will get some percentage of unknown costs}, {number of unknowns in total or percentage of unknown costs in every constraints}, {path to generate the output}, {name of the output file}
 
 Example: python readInput.py Rnd5-7-1.xml 2 40 ./ 1
 
-Step2: We run the local search algorithm on the problem using the generated files from the previous step
+### Step2:
+
+We run the local search algorithm on the problem using the generated files from the previous step
 
 An example command line statement to run the local search program is: <br />
 
