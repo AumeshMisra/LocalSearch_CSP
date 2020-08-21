@@ -414,7 +414,7 @@ def main():
         if (elicitation_strat != "WW" and elicitation_strat != "ALL"
                 and elicitation_strat != "BB" and elicitation_strat != "BW"):
             elicitation_strat = "ALL"
-            budget = float('inf')
+        budget = float('inf')
 
 
 
