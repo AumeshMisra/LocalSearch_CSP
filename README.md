@@ -15,19 +15,19 @@ All you have to do is clone/download the repo
 
 ## Deployment
 
-An example command line statement to run the program is:
+An example command line statement to run the program is: <br />
 python LocalSearch_IWCSP.py --iterations 100000 --flag 1 --budget 70 --filepath input_files/Rnd5-3-1.xml --strategy BW --original 0
 
 Here are the different input parameters:
-1) --iterations
+1) --iterations <br />
   number of iterations
-2) --flag
+2) --flag <br />
   a flag on whether to include a budget or no (switch to 1 to include a budget)
-3) --budget
+3) --budget <br />
   the budget the elicitation cost should not exceed
-4) --filepath
+4) --filepath <br />
   takes a filepath
-5) --strategy
+5) --strategy <br />
   the elicitation strategy we should employ
-6) --original
+6) --original <br />
   switch to 1 to run the program as an (IWCSP) otherwise leave as 0
