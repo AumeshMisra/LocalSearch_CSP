@@ -79,6 +79,8 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                     constraint_value = 0
                     if self.heuristic == 'lbc':
                         constraint_value = self.lbc
+                    if self.heuristic == 'lbc_ec':
+                        constraint_value = self.lbc + self.elicitationTable[scope][row_cell][collumn_cell]
                 else:
                     constraint_value = self.incompTable[scope][row_cell][column_cell]
 
@@ -178,6 +180,8 @@ class LocalSearch_IWCSP(LocalSearchProblem):
                     else:
                         if self.heuristic == 'lbc':
                             preference_val += self.lbc
+                        if self.heuristic == 'lbc_ec':
+                            preference_val += self.lbc + self.elicitationTable[scope][row_cell][column_cell]
                         count += 1
 
 
@@ -389,8 +393,11 @@ def define_parser():
                         help='a flag to go back to the original proble. We can only use BB, WW, and ALL elicitation strategies')
     parser.add_argument('--strategy', type=str,
                         help='an elicitation strategy to use')
+    parser.add_argument('--heuristic', type=str,
+                        help='an heuristic to use')
     parser.add_argument('--filepath', type=str,
                         help='the filepath to a problem')
+
     return (parser)
 
 def main():
@@ -405,6 +412,7 @@ def main():
     iterations = args.iterations
     elicitation_strat = args.strategy
     filepath = args.filepath
+    heuristic = args.heuristic
     if (args.flag == 1):
         budget = args.budget
     else:
@@ -422,7 +430,7 @@ def main():
     for i in range(0,runs):
 
         start = time.time()
-        LSP = LocalSearch_IWCSP(name = '1', file_path = filepath, tabu_list_maxsize = 1000, elicitation_strat = elicitation_strat, budget = budget)
+        LSP = LocalSearch_IWCSP(name = '1', file_path = filepath, tabu_list_maxsize = 1000, elicitation_strat = elicitation_strat, budget = budget, heuristic = heuristic)
         LSP.solve(iterations = iterations, p = 0.20)
         end = time.time()
         runtime = end - start
