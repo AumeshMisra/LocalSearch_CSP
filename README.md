@@ -46,3 +46,16 @@ Here are the different input parameters:
   the elicitation strategy we should employ
 6) --original <br />
   switch to 1 to run the program as an (IWCSP) otherwise leave as 0
+
+## Brief Overview
+
+### Elicitation Strategies
+
+There are multiple elicitation strategies that the user can choose from:
+1) ALL: User elicits all missing values.
+2) WW: User elicits the missing value that has the worst (highest) constraint cost. We do this until the constraint cost of the explored solution > optimal solution.
+3) BB: User elicits the missing value that has the best (lowest) constraint cost. We do this until the constraint cost of the explored solution > optimal solution.
+4) BW: User alternates between eliciting the missing value with best (lowest) constraint cost and worst (highest) constraint cost. We do this until the constraint cost of the explored solution > optimal solution.
+5) WM: User elicits the missing value that has the worst (highest) constraint cost + elicitation cost. We do this until cost of the explored solution > optimal solution and if the elicitation cost of (missing values + cumulative elicitation cost) < budget.
+6) BM: User elicits the missing value that has the best (lowest) constraint cost + elicitation cost. We do this until cost of the explored solution > optimal solution and if the elicitation cost of (missing values + cumulative elicitation cost) < budget.
+7) MM: User elicits the missing value that has the best (lowest) elicitation cost only. We do this until cost of the explored solution > optimal solution and if the elicitation cost of (missing value + cumulative elicitation cost) < budget
